@@ -1,11 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>🎬 Watchlist</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <h1>🎬 Mi Watchlist</h1>
+
+
+  <div class="stats">
+    <p id="total">Total: 0</p>
+    <p id="promedio">Promedio: 0</p>
+  </div>
+
+ 
+  <select id="filtro">
+    <option value="todas">Todas</option>
+    <option value="Pendiente">Pendiente</option>
+    <option value="Viendo">Viendo</option>
+    <option value="Vista">Vista</option>
+  </select>
+
+ 
+  <form id="form">
+    <input type="text" id="titulo" placeholder="Título" required>
+    <input type="text" id="genero" placeholder="Género" required>
+    <input type="number" id="calificacion" placeholder="Calificación" required>
     
+    <select id="estado">
+      <option>Pendiente</option>
+      <option>Viendo</option>
+      <option>Vista</option>
+    </select>
+
+    <input type="text" id="comentario" placeholder="Comentario">
+
+    <button type="submit">Agregar</button>
+  </form>
+
+  <!-- Lista -->
+  <div id="lista" class="grid"></div>
+
+  <script src="app.js"></script>
 </body>
 </html>
