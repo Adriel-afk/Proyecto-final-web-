@@ -1,7 +1,12 @@
+const titulo = document.getElementById("titulo");
+const genero = document.getElementById("genero");
+const calificacion = document.getElementById("calificacion");
+const estado = document.getElementById("estado");
+const comentario = document.getElementById("comentario");
+
 const form = document.getElementById("form");
 const lista = document.getElementById("lista");
 const filtro = document.getElementById("filtro");
-
 const total = document.getElementById("total");
 const promedio = document.getElementById("promedio");
 
