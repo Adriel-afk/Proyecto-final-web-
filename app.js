@@ -8,7 +8,7 @@ const promedio = document.getElementById("promedio");
 let peliculas = [];
 let editIndex = null;
 
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const peli = {
@@ -20,15 +20,36 @@ form.addEventListener("submit", (e) => {
   };
 
   if (editIndex !== null) {
-    peliculas[editIndex] = peli;
+    await fetch(`http://localhost:3000/peliculas/${editIndex}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(peli)
+    });
+
     editIndex = null;
-  } else {
-    peliculas.push(peli);
+  } 
+
+  else {
+    await fetch("http://localhost:3000/peliculas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(peli)
+    });
   }
 
   form.reset();
-  mostrarPeliculas();
+  cargarPeliculas();
 });
+
+async function cargarPeliculas() {
+  const res = await fetch("http://localhost:3000/peliculas");
+  peliculas = await res.json();
+  mostrarPeliculas();
+}
 
 function mostrarPeliculas() {
   lista.innerHTML = "";
@@ -57,10 +78,13 @@ function mostrarPeliculas() {
   actualizarStats();
 }
 
-function eliminar(i) {
+async function eliminar(i) {
   if (confirm("¿Eliminar película?")) {
-    peliculas.splice(i, 1);
-    mostrarPeliculas();
+    await fetch(`http://localhost:3000/peliculas/${i}`, {
+      method: "DELETE"
+    });
+
+    cargarPeliculas();
   }
 }
 
@@ -91,3 +115,5 @@ function actualizarStats() {
 }
 
 filtro.addEventListener("change", mostrarPeliculas);
+
+cargarPeliculas();
