@@ -1,59 +1,66 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-
-require("dotenv").config();
 const mongoose = require("mongoose");
-
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB conectado"))
-  .catch(err => console.log(err));
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-let peliculas = [];
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB conectado correctamente"))
+  .catch(err => console.log(err));
 
-app.post("/peliculas", (req, res) => {
-  const peli = req.body;
-
-  if (!peli.titulo || !peli.genero) {
-    return res.status(400).json({ error: "Faltan datos" });
-  }
-
-  peliculas.push(peli);
-  res.json({ mensaje: "Película guardada", data: peli });
+const peliculaSchema = new mongoose.Schema({
+  titulo: String,
+  genero: String,
+  calificacion: Number,
+  estado: String,
+  comentario: String
 });
 
-app.get("/peliculas", (req, res) => {
-  res.json(peliculas);
+const Pelicula = mongoose.model("Pelicula", peliculaSchema);
+
+app.post("/peliculas", async (req, res) => {
+  try {
+    const nueva = new Pelicula(req.body);
+    await nueva.save();
+    res.json(nueva);
+  } catch (err) {
+    res.status(500).json({ error: "Error al guardar" });
+  }
 });
 
-app.put("/peliculas/:id", (req, res) => {
-  const id = req.params.id;
-
-  if (!peliculas[id]) {
-    return res.status(404).json({ error: "No existe" });
+app.get("/peliculas", async (req, res) => {
+  try {
+    const peliculas = await Pelicula.find();
+    res.json(peliculas);
+  } catch (err) {
+    res.status(500).json({ error: "Error al obtener" });
   }
-
-  peliculas[id] = req.body;
-  res.json({ mensaje: "Actualizada" });
 });
 
-app.delete("/peliculas/:id", (req, res) => {
-  const id = req.params.id;
-
-  if (!peliculas[id]) {
-    return res.status(404).json({ error: "No existe" });
+app.put("/peliculas/:id", async (req, res) => {
+  try {
+    await Pelicula.findByIdAndUpdate(req.params.id, req.body);
+    res.json({ mensaje: "Actualizada" });
+  } catch (err) {
+    res.status(500).json({ error: "Error al actualizar" });
   }
+});
 
-  peliculas.splice(id, 1);
-  res.json({ mensaje: "Eliminada" });
+app.delete("/peliculas/:id", async (req, res) => {
+  try {
+    await Pelicula.findByIdAndDelete(req.params.id);
+    res.json({ mensaje: "Eliminada" });
+  } catch (err) {
+    res.status(500).json({ error: "Error al eliminar" });
+  }
 });
 
 app.get("/", (req, res) => {
-  res.send("Servidor funcionando");
+  res.send("Servidor funcionando correctamente");
 });
 
 const PORT = 3000;
