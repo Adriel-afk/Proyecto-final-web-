@@ -8,6 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const path = require("path");
+
+app.use(express.static(path.join(__dirname)));
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB conectado correctamente"))
   .catch(err => console.log(err));
