@@ -25,7 +25,7 @@ form.addEventListener("submit", async (e) => {
   };
 
   if (editIndex !== null) {
-    await fetch(`https://watchlist-8k0a.onrender.com/peliculas/${editIndex}`, {
+    await fetch(`/peliculas/${editIndex}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
@@ -37,7 +37,7 @@ form.addEventListener("submit", async (e) => {
   } 
 
   else {
-    await fetch("https://watchlist-8k0a.onrender.com/peliculas", {
+    await fetch("/peliculas", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -51,7 +51,7 @@ form.addEventListener("submit", async (e) => {
 });
 
 async function cargarPeliculas() {
-  const res = await fetch("https://watchlist-8k0a.onrender.com/peliculas");
+  const res = await fetch("/peliculas");
   peliculas = await res.json();
   mostrarPeliculas();
 }
@@ -85,7 +85,7 @@ function mostrarPeliculas() {
 
 async function eliminar(i) {
   if (confirm("¿Eliminar película?")) {
-    await fetch(`https://watchlist-8k0a.onrender.com/peliculas/${i}`, {
+    await fetch(`/peliculas/${i}`, {
       method: "DELETE"
     });
 
