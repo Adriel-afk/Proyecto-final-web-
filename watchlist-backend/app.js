@@ -74,8 +74,8 @@ function mostrarPeliculas() {
         <p>${p.estado}</p>
         <p>${p.comentario}</p>
 
-        <button onclick="editar(${i})">Editar</button>
-        <button onclick="eliminar(${i})">Eliminar</button>
+        <button onclick="editar('${p._id}')">Editar</button>
+        <button onclick="eliminar('${p._id}')">Eliminar</button>
       </div>
     `;
   });
@@ -83,28 +83,27 @@ function mostrarPeliculas() {
   actualizarStats();
 }
 
-async function eliminar(i) {
-  if (confirm("¿Eliminar película?")) {
-    await fetch(`/peliculas/${i}`, {
-      method: "DELETE"
-    });
+async function eliminar(id) {
+    if (confirm("¿Eliminar película?")) {
+        await fetch(`/peliculas/${id}`, {
+            method: "DELETE"
+        });
 
-    cargarPeliculas();
-  }
+        cargarPeliculas();
+    }
 }
 
-function editar(i) {
-  const p = peliculas[i];
+function editar(id) {
+    const p = peliculas.find(p => p._id === id);
 
-  titulo.value = p.titulo;
-  genero.value = p.genero;
-  calificacion.value = p.calificacion;
-  estado.value = p.estado;
-  comentario.value = p.comentario;
+    titulo.value = p.titulo;
+    genero.value = p.genero;
+    calificacion.value = p.calificacion;
+    estado.value = p.estado;
+    comentario.value = p.comentario;
 
-  editIndex = i;
+    editIndex = id;
 }
-
 function actualizarStats() {
   total.textContent = "Total: " + peliculas.length;
 
